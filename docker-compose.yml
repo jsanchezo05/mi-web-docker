@@ -1,0 +1,35 @@
+services:
+  mi-web:
+    build: .
+    container_name: mi-web-compose
+    ports:
+      - "8080:80"
+    depends_on:
+      - mi-db
+    restart: always
+    networks:
+      - red-publica
+      - red-privada
+
+  mi-db:
+    image: mysql:8.0
+    container_name: mi-db-compose
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - datos-mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - red-privada
+
+networks:
+  red-publica:
+    driver: bridge
+  red-privada:
+    driver: bridge
+    internal: true
+
+volumes:
+  datos-mysql:
